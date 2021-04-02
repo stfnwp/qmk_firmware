@@ -17,8 +17,6 @@ extern uint8_t is_master;
 
 #define _QWERTY 0
 #define _LOWER 1
-#define _RAISE 2
-#define _ADJUST 3
 #define _FOO 4
 #define _BAR 5
 #define _NUM 6
@@ -26,11 +24,13 @@ extern uint8_t is_master;
 enum custom_keycodes {
   QWERTY = SAFE_RANGE,
   LOWER,
-  RAISE,
-  ADJUST,
   FOO,
   BAR,
-  NUM
+  NUM,
+  DE_OE,
+  DE_UE,
+  DE_AE,
+  DE_SS
 };
 
 
@@ -52,11 +52,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 
  [_QWERTY] = LAYOUT( \
-  KC_ESC,            KC_1,   KC_2,    KC_3,    KC_4,         KC_5,                                      KC_6,     KC_7,         KC_8,    KC_9,         KC_0,    KC_MINS, \
-  LT(_BAR, KC_TAB),  KC_Q,   KC_W,    KC_E,    KC_R,         KC_T,                                      KC_Y,     KC_U,         KC_I,    KC_O,         KC_P,    KC_BSLS, \
-  LOWER,             KC_A,   KC_S,    KC_D,    LCTL_T(KC_F), KC_G,                                      KC_H,     LCTL_T(KC_J), KC_K,    KC_L,         KC_SCLN, KC_QUOT, \
-  KC_LSFT,           KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,    KC_LBRC,               KC_RBRC,   KC_N,     KC_M,              KC_COMM, KC_DOT,       KC_SLSH,  KC_EQL, \
-                             KC_LGUI, KC_LALT, NUM, LSFT_T(KC_SPC),  KC_SFTENT,                               KC_BSPC,  LT(_FOO, KC_INS),  MT(MOD_RALT, KC_GRV) \
+  KC_ESC,            KC_1,   KC_2,    KC_3,         KC_4,         KC_5,                                      KC_6,     KC_7,         KC_8,         KC_9,         KC_0,    KC_MINS, \
+  LT(_BAR, KC_TAB),  KC_Q,   KC_W,    KC_E,         KC_R,         KC_T,                                      KC_Y,     KC_U,         KC_I,         KC_O,         KC_P,    KC_BSLS, \
+  LOWER,             KC_A,   KC_S,    LALT_T(KC_D), LCTL_T(KC_F), KC_G,                                      KC_H,     LCTL_T(KC_J), LALT_T(KC_K), KC_L,         KC_SCLN, KC_QUOT, \
+  KC_GRV,            KC_Z,   KC_X,    KC_C,         KC_V,         KC_B,    KC_LBRC,               KC_RBRC,   KC_N,     KC_M,         KC_COMM,      KC_DOT,       KC_SLSH,  KC_EQL, \
+                             KC_LGUI, KC_INS,       NUM, LSFT_T(KC_SPC),  KC_SFTENT,                               KC_BSPC,  FOO,  KC_RALT \
 ),
 /* LOWER
  * ,-----------------------------------------.                    ,-----------------------------------------.
@@ -74,58 +74,15 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  */
 [_LOWER] = LAYOUT( \
   KC_GRV,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                     KC_F6, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11, \
-  _______, _______, _______, _______, _______, _______,                   _______, _______, _______,_______, KC_INSERT, KC_F12, \
+  _______, _______, _______, _______, _______, _______,                   _______, DE_UE,  _______,DE_OE, KC_INSERT, KC_F12, \
   KC_GRV, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                   KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_RPRN, KC_TILD, \
   _______, _______, _______, _______, _______, _______, _______, _______, XXXXXXX, KC_UNDS, KC_PLUS, KC_LCBR, KC_RCBR, KC_PIPE, \
                              _______, _______, _______, _______, _______,  KC_DEL, _______, _______\
 ),
-/* RAISE
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      | VOL0 |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |   `  |   1  |   2  |   3  |   4  |   5  |                    |   6  |   7  |   8  |   9  |   0  |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |  F1  |  F2  |  F3  |  F4  |  F5  |  F6  |-------.    ,-------|      | Left | Down |  Up  |Right | VOL+ |
- * |------+------+------+------+------+------|   [   |    |    ]  |------+------+------+------+------+------|
- * |  F7  |  F8  |  F9  | F10  | F11  | F12  |-------|    |-------|   +  |   -  |   =  |   [  |   ]  | VOL- |
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
-
-[_RAISE] = LAYOUT( \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC__MUTE, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC_PSCR, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   KC_HOME, KC_PGDN, KC_PGUP, KC_END,  XXXXXXX, KC__VOLUP, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, KC__VOLDOWN, \
-                             _______, _______, _______,  _______, _______,  _______, _______, _______ \
-),
-/* ADJUST
- * ,-----------------------------------------.                    ,-----------------------------------------.
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |                    |      |      |      |      |      |      |
- * |------+------+------+------+------+------|                    |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------.    ,-------|      |      |RGB ON| HUE+ | SAT+ | VAL+ |
- * |------+------+------+------+------+------|       |    |       |------+------+------+------+------+------|
- * |      |      |      |      |      |      |-------|    |-------|      |      | MODE | HUE- | SAT- | VAL- |
- * `-----------------------------------------/       /     \      \-----------------------------------------'
- *                   | LAlt | LGUI |LOWER | /Space  /       \Enter \  |RAISE |BackSP| RGUI |
- *                   |      |      |      |/       /         \      \ |      |      |      |
- *                   `----------------------------'           '------''--------------------'
- */
-  [_ADJUST] = LAYOUT( \
-  XXXXXXX, RGB_M_P, RGB_M_B, RGB_M_R,RGB_M_SW, RGB_M_SN,                  RGB_M_K, RGB_M_X, RGB_M_G, RGB_M_T, XXXXXXX, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, RGB_TOG, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_MOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD, \
-                             _______, _______, _______, _______, _______,  _______, _______, _______ \
-  ),
   [_FOO] = LAYOUT( \
   XXXXXXX, RGB_M_P, RGB_M_B, RGB_M_R,RGB_M_SW, RGB_M_SN,                  RGB_M_K, RGB_M_X, RGB_M_G, RGB_M_T, XXXXXXX, XXXXXXX, \
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, \
-  XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, RGB_TOG, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
+  XXXXXXX, DE_AE,   DE_SS,   XXXXXXX, XXXXXXX, XXXXXXX,                   XXXXXXX, RGB_TOG, RGB_SPI, RGB_HUI, RGB_SAI, RGB_VAI, \
   XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_MOD, RGB_SPD, RGB_HUD, RGB_SAD, RGB_VAD, \
                              _______, _______, _______, _______, _______,  _______, _______, _______ \
   ),
@@ -224,31 +181,11 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case LOWER:
       if (record->event.pressed) {
         layer_on(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
       } else {
         layer_off(_LOWER);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
       }
       return false;
       break;
-    case RAISE:
-      if (record->event.pressed) {
-        layer_on(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      } else {
-        layer_off(_RAISE);
-        update_tri_layer_RGB(_LOWER, _RAISE, _ADJUST);
-      }
-      return false;
-      break;
-    case ADJUST:
-        if (record->event.pressed) {
-          layer_on(_ADJUST);
-        } else {
-          layer_off(_ADJUST);
-        }
-        return false;
-        break;
     case FOO:
         if (record->event.pressed) {
           layer_on(_FOO);
@@ -273,6 +210,42 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         }
         return false;
         break;
+    case DE_OE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_O);
+      } else {
+        unregister_code(KC_O);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DE_UE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_U);
+      } else {
+        unregister_code(KC_U);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DE_AE:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_A);
+      } else {
+        unregister_code(KC_A);
+        unregister_code(KC_RALT);
+      }
+      break;
+    case DE_SS:
+      if (record->event.pressed) {
+        register_code(KC_RALT);
+        register_code(KC_S);
+      } else {
+        unregister_code(KC_S);
+        unregister_code(KC_RALT);
+      }
+      break;
   }
   return true;
 }
