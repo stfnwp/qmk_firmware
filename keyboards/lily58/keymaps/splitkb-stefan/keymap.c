@@ -303,6 +303,12 @@ layer_state_t layer_state_set_user(layer_state_t state) {
     case _BAR:
         rgblight_sethsv(HSV_YELLOW);
         break;
+    case _NUM:
+        rgblight_sethsv(HSV_MAGENTA);
+        break;
+    case _FOO:
+        rgblight_sethsv(HSV_SPRINGGREEN);
+        break;
     default: //  for any other layers, or the default layer
         rgblight_sethsv(HSV_CYAN);
         break;
